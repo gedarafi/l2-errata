@@ -1,0 +1,82 @@
+# l2-errata taxonomy
+#
+# Every logged mistake gets TWO labels:
+#   1. errant_type — WHAT changed (grammar layer), from ERRANT.
+#   2. cause       — WHY it probably happened (learner layer), custom to l2-errata.
+#
+# Grammar layer source:
+#   Bryant, C., Felice, M., & Briscoe, T. (2017). Automatic Annotation and
+#   Evaluation of Error Types for Grammatical Error Correction. Proceedings of
+#   the 55th Annual Meeting of the ACL (Vol. 1: Long Papers), 793–805.
+#   https://doi.org/10.18653/v1/P17-1074 — code: https://github.com/chrisjbryant/errant
+#
+# errant_type format: "<OP>:<TYPE>", e.g. "R:PREP", "M:PUNCT", "R:VERB:TENSE".
+
+errant:
+  operations:
+    M: Missing — something needs to be added
+    R: Replacement — something needs to be swapped
+    U: Unnecessary — something needs to be removed
+
+  types:
+    ADJ: Adjective
+    ADJ:FORM: Comparative/superlative form (big → bigger)
+    ADV: Adverb
+    CONJ: Conjunction
+    CONTR: Contraction (do not ↔ don't)
+    DET: Determiner / article (a, an, the)
+    MORPH: Morphology — same root, different word class (quick → quickly)
+    NOUN: Noun (word choice)
+    NOUN:INFL: Noun inflection (informations → information)
+    NOUN:NUM: Noun number, singular ↔ plural (7 month → 7 months)
+    NOUN:POSS: Possessive noun (friends → friend's)
+    ORTH: Orthography — capitalization and spacing (a missing hyphen is M:PUNCT)
+    OTHER: Anything not covered by another type (usually rephrasing)
+    PART: Particle (go out → go)
+    PREP: Preposition (depends of → depends on)
+    PRON: Pronoun
+    PUNCT: Punctuation
+    SPELL: Spelling
+    UNK: Detected but not corrected
+    VERB: Verb (word choice)
+    VERB:FORM: Infinitive, gerund, participle (may contains → may contain)
+    VERB:INFL: Verb inflection (getted → got)
+    VERB:SVA: Subject–verb agreement (he go → he goes)
+    VERB:TENSE: Tense (nothing go → nothing went)
+    WO: Word order
+
+# Learner layer — custom to l2-errata (not part of ERRANT).
+# Defaults assume a Spanish (es) first language; examples come from the seed log.
+causes:
+  CALQUE:
+    description: Literal translation of a phrase or construction from the first language.
+    example: "count with me (contar conmigo) → count on me"
+  FALSE_FRIEND:
+    description: A word that looks like a first-language word but means something else or is not used that way.
+    example: "aliments (alimentos) → foods"
+  L1_SYNTAX:
+    description: Sentence built with first-language structure or word order.
+    example: "While exists willing to fight (mientras exista…) → As long as there is the will to fight"
+  L1_CONVENTION:
+    description: A first-language spelling or punctuation convention carried over.
+    example: "swedish → Swedish (Spanish does not capitalize languages: sueco)"
+  OVERGENERALIZATION:
+    description: An English rule applied where it does not belong.
+    example: "may contains → may contain (no -s after a modal verb)"
+  PHONETIC_SPELLING:
+    description: Spelled the way it sounds.
+    example: "butterflights → butterflies"
+  UNNATURAL:
+    description: Grammatically acceptable but not what a native speaker would say.
+    example: "exchange the video call → swap the video call"
+  SLIP:
+    description: Known rule, momentary mistake (typo, missed capital, missed comma).
+    example: "? maybe → ? Maybe"
+  VARIETY_MIX:
+    description: >-
+      A spelling or word from the other English variety than the one the text
+      follows (American en-US vs British en-GB), or both varieties mixed in one
+      text. Set the entry's `variety` field to the variety the correction uses.
+    example: "Program → Programme (British text: programme, organisation, colour)"
+  UNKNOWN:
+    description: Cause not clear yet. Revisit when the pattern repeats.

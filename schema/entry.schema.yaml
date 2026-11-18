@@ -1,0 +1,96 @@
+# JSON Schema (draft 2020-12) for one l2-errata log entry, written as YAML.
+# Generated from scripts/l2_errata/models.py: do not edit by hand.
+# Regenerate with: uv run scripts/errata.py schema
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://github.com/gedarafi/l2-errata/schema/entry.schema.yaml
+$defs:
+  Cause:
+    description: Likely reason for the mistake, see taxonomy.yaml.
+    enum:
+    - CALQUE
+    - FALSE_FRIEND
+    - L1_SYNTAX
+    - L1_CONVENTION
+    - OVERGENERALIZATION
+    - PHONETIC_SPELLING
+    - UNNATURAL
+    - SLIP
+    - VARIETY_MIX
+    - UNKNOWN
+    title: Cause
+    type: string
+  Source:
+    description: Where the mistake was written.
+    enum:
+    - chat
+    - notebook
+    - email
+    - message
+    - document
+    - speech
+    - other
+    title: Source
+    type: string
+  Variety:
+    description: English variety a correction follows.
+    enum:
+    - en-US
+    - en-GB
+    title: Variety
+    type: string
+additionalProperties: false
+description: 'One mistake = one entry = one line in a JSONL log. A sentence with three mistakes produces
+  three entries that share the same context. Rules beyond the field types: `original` appears verbatim
+  in `context`, the date in `id` equals `date`, VARIETY_MIX entries set `variety`, and ids are unique
+  within a log.'
+properties:
+  id:
+    description: YYYYMMDD-NNN, unique within the log.
+    pattern: ^[0-9]{8}-[0-9]{3}$
+    type: string
+  date:
+    description: Date the mistake was written (YYYY-MM-DD).
+    format: date
+    type: string
+  lang:
+    description: Target language being learned (BCP-47), e.g. en, sv.
+    type: string
+  l1:
+    default: es
+    description: Writer's first language (BCP-47).
+    type: string
+  source:
+    $ref: '#/$defs/Source'
+  original:
+    description: The mistaken span as written.
+    minLength: 1
+    type: string
+  corrected:
+    description: The correction for that span. Empty string when the fix is a pure deletion.
+    type: string
+  context:
+    description: Full original sentence, for review later.
+    type: string
+  errant_type:
+    description: ERRANT operation and type, see taxonomy.yaml.
+    pattern: ^(M|R|U):(ADJ|ADJ:FORM|ADV|CONJ|CONTR|DET|MORPH|NOUN|NOUN:INFL|NOUN:NUM|NOUN:POSS|ORTH|OTHER|PART|PREP|PRON|PUNCT|SPELL|UNK|VERB|VERB:FORM|VERB:INFL|VERB:SVA|VERB:TENSE|WO)$
+    type: string
+  cause:
+    $ref: '#/$defs/Cause'
+  variety:
+    $ref: '#/$defs/Variety'
+    description: English variety the correction follows (American or British). Set it for VARIETY_MIX
+      entries; optional elsewhere.
+  note:
+    description: Short explanation or rule to remember.
+    type: string
+required:
+- id
+- date
+- lang
+- original
+- corrected
+- errant_type
+- cause
+title: l2-errata log entry
+type: object
